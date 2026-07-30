@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marquee — Movie Reviews & Ratings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="marquee">
+  <div class="marquee__bulbs" aria-hidden="true"></div>
+  <div class="marquee__inner">
+    <p class="marquee__eyebrow">Now Showing</p>
+    <h1 class="marquee__title">MARQUEE</h1>
+    <p class="marquee__tagline">Reviews, ratings, and honest takes on the films worth talking about.</p>
+    <div class="marquee__feature" id="featured-film">
+      <!-- featured (top rated) film injected here -->
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="toolbar">
+    <div class="toolbar__search">
+      <label for="search" class="visually-hidden">Search films</label>
+      <input type="search" id="search" placeholder="Search by title or director…" autocomplete="off">
+    </div>
+    <div class="toolbar__genres" id="genre-filters" role="group" aria-label="Filter by genre">
+      <!-- genre chips injected here -->
+    </div>
+  </section>
+
+  <section class="grid" id="movie-grid" aria-live="polite">
+    <!-- movie ticket-stub cards injected here -->
+  </section>
+
+  <p class="empty-state" id="empty-state" hidden>No films match that search. Try a different title or clear the filter.</p>
+</main>
+
+<!-- Detail / review modal -->
+<div class="modal-backdrop" id="modal-backdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal__close" id="modal-close" aria-label="Close">&times;</button>
+    <div class="modal__content" id="modal-content">
+      <!-- movie detail + reviews injected here -->
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <p>Marquee — a small site for people who watch too many movies. Ratings stored right here in your browser.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
