@@ -373,3 +373,91 @@ document.addEventListener("keydown", (e) => {
 renderFeatured();
 renderGenreChips();
 renderGrid();
+initBackgroundAnimation();
+
+// ============ Animated background: drifting light particles ============
+function initBackgroundAnimation() {
+  const canvas = document.getElementById("bg-canvas");
+  if (!canvas || !canvas.getContext) return;
+  const ctx = canvas.getContext("2d");
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const BG_COLOR = "#0e0e12";
+  const PARTICLE_COLORS = ["rgba(232,163,61,", "rgba(166,52,70,", "rgba(242,240,234,"];
+
+  let width, height, particles;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+
+  function makeParticle() {
+    return {
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 1.6 + 0.4,
+      speedY: Math.random() * 0.35 + 0.08,
+      driftX: (Math.random() - 0.5) * 0.25,
+      opacity: Math.random() * 0.5 + 0.15,
+      color: PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)]
+    };
+  }
+
+  function initParticles() {
+    const count = Math.min(90, Math.floor((width * height) / 14000));
+    particles = Array.from({ length: count }, makeParticle);
+  }
+
+  function drawStatic() {
+    ctx.fillStyle = BG_COLOR;
+    ctx.fillRect(0, 0, width, height);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.fillStyle = p.color + p.opacity + ")";
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  function tick() {
+    ctx.fillStyle = BG_COLOR;
+    ctx.fillRect(0, 0, width, height);
+
+    particles.forEach(p => {
+      p.y -= p.speedY;
+      p.x += p.driftX;
+
+      if (p.y < -5) { p.y = height + 5; p.x = Math.random() * width; }
+      if (p.x < -5) p.x = width + 5;
+      if (p.x > width + 5) p.x = -5;
+
+      ctx.beginPath();
+      ctx.fillStyle = p.color + p.opacity + ")";
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    requestAnimationFrame(tick);
+  }
+
+  resize();
+  initParticles();
+
+  if (prefersReducedMotion) {
+    drawStatic();
+  } else {
+    tick();
+  }
+
+  let resizeTimeout;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      resize();
+      initParticles();
+      if (prefersReducedMotion) drawStatic();
+    }, 150);
+  });
+}
